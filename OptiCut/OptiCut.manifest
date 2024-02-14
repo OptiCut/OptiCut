@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"7fb8c78e-0bb3-4a67-beaf-f034ae30251a",
+	"author":	"OptiCut",
+	"description":	{
+		"":	"Woodworking utility to lay out project bodies on stock material for efficient cutting."
+	},
+	"version":	"0.0.1",
+	"runOnStartup":	true,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
