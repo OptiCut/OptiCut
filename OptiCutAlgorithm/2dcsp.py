@@ -1,4 +1,4 @@
-""" 
+"""
 Link: https://stackoverflow.com/questions/76547575/how-can-i-distinguish-between-right-and-wrong-solutions-in-2d-cutting-stock-prob 
 """
 import collections
