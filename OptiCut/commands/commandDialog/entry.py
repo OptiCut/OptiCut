@@ -79,14 +79,38 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     inputs = args.command.commandInputs
 
     # TODO Define the dialog for your command by adding different inputs to the command.
-
-    # Create a simple text box input.
-    inputs.addTextBoxCommandInput('text_box', 'Some Text', 'Enter some text.', 1, False)
+    # how many boards will they have?
+    boardThicknessMenu = inputs.addDropDownCommandInput('board_thickness', 'What is the board thickness', 1)
+    boardThicknessMenuList = boardThicknessMenu.listItems
+    boardThicknessMenuList.add("1/4 inch", True)
+    boardThicknessMenuList.add("1/2 inch", False)
+    boardThicknessMenuList.add("1 inch", False)
+    boardThicknessMenuInput = boardThicknessMenu.selectedItem
+    # To make drop down menu object with style of text list drop down style
+    boardSizeMenu = inputs.addDropDownCommandInput('board_size', 'What is the board size', 1)
+    # object to populate and interact with items in drop down
+    boardSizeMenuList = boardSizeMenu.listItems
+    # adds value to list and if already selected -> should the options include
+    boardSizeMenuList.add("2'x4'", False)
+    boardSizeMenuList.add("2'x6'", False)
+    boardSizeMenuList.add("4'x4'", False)
+    boardSizeMenuInput = boardSizeMenu.selectedItem
 
     # Create a value input field and set the default using 1 unit of the default length unit.
     defaultLengthUnits = app.activeProduct.unitsManager.defaultLengthUnits
-    default_value = adsk.core.ValueInput.createByString('1')
-    inputs.addValueInput('value_input', 'Some Value', defaultLengthUnits, default_value)
+    default_value = adsk.core.ValueInput.createByString('3')
+    kerfSizeMenu = inputs.addValueInput('kerf_size', 'What is the blade kerf', defaultLengthUnits, default_value)
+    menuSelect = inputs.addSelectionInput("sel_input", "Selection", "Selection")
+    buttonMenu = inputs.addButtonRowCommandInput("but_menu", "button", False)
+    buttonMenuList = buttonMenu.listItems
+    buttonMenuList.add("item", False)
+    buttonMenuList.add("2", True)
+    # value of input
+    kerfSizeMenuInput = kerfSizeMenu.expression
+    print(kerfSizeMenuInput)
+    print(boardThicknessMenuInput)
+    print(boardSizeMenuInput)
+    print("Test")
 
     # TODO Connect to the events that are needed by this command.
     futil.add_handler(args.command.execute, command_execute, local_handlers=local_handlers)
