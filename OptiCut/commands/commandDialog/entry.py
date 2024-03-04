@@ -2,9 +2,9 @@ import adsk.core
 import os
 from ...lib import fusion360utils as futil
 from ... import config
+
 app = adsk.core.Application.get()
 ui = app.userInterface
-
 
 # TODO *** Specify the command identity information. ***
 CMD_ID = f'{config.COMPANY_NAME}_{config.ADDIN_NAME}_cmdDialog'
@@ -78,6 +78,10 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     # https://help.autodesk.com/view/fusion360/ENU/?contextId=CommandInputs
     inputs = args.command.commandInputs
 
+    selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Bodies', 'Please select bodies to map')
+    selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.Bodies)
+    selectInput.setSelectionLimits(maximum=100, minimum=0)
+
     # TODO Define the dialog for your command by adding different inputs to the command.
     # how many boards will they have?
     boardThicknessMenu = inputs.addDropDownCommandInput('board_thickness', 'What is the board thickness', 1)
@@ -102,11 +106,11 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     defaultLengthUnits = app.activeProduct.unitsManager.defaultLengthUnits
     default_value = adsk.core.ValueInput.createByString('.125')
     kerfSizeMenu = inputs.addValueInput('kerf_size', 'What is the blade kerf', defaultLengthUnits, default_value)
-    menuSelect = inputs.addSelectionInput("sel_input", "Selection", "Selection")
     buttonMenu = inputs.addButtonRowCommandInput("but_menu", "button", False)
     buttonMenuList = buttonMenu.listItems
     buttonMenuList.add("item", False)
     buttonMenuList.add("2", True)
+
     # value of input
     kerfSizeMenuInput = kerfSizeMenu.expression
     print(kerfSizeMenuInput)
@@ -166,14 +170,14 @@ def command_validate_input(args: adsk.core.ValidateInputsEventArgs):
     futil.log(f'{CMD_NAME} Validate Input Event')
 
     inputs = args.inputs
-    
+
     # Verify the validity of the input values. This controls if the OK button is enabled or not.
     valueInput = inputs.itemById('value_input')
     if valueInput.value >= 0:
         args.areInputsValid = True
     else:
         args.areInputsValid = False
-        
+
 
 # This event handler is called when the command terminates.
 def command_destroy(args: adsk.core.CommandEventArgs):
