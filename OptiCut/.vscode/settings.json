@@ -1,5 +1,11 @@
 {
+<<<<<<< HEAD
 	"python.autoComplete.extraPaths":	["/Users/matthewbacheldor/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs", "C:/Users/dandy/AppData/Roaming/Autodesk/Autodesk Fusion 360/API/Python/defs"],
 	"python.analysis.extraPaths":	["/Users/matthewbacheldor/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs", "C:/Users/dandy/AppData/Roaming/Autodesk/Autodesk Fusion 360/API/Python/defs"],
 	"python.defaultInterpreterPath":	"C:/Users/dandy/AppData/Local/Autodesk/webdeploy/production/0a22ca515421cec8a3addbf5f00fde68499915d7/Python/python.exe"
+=======
+	"python.autoComplete.extraPaths":	["/Users/matthewbacheldor/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs", "/Users/Clare1/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs"],
+	"python.analysis.extraPaths":	["/Users/matthewbacheldor/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs", "/Users/Clare1/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Python/defs"],
+	"python.defaultInterpreterPath":	"/Users/Clare1/Library/Application Support/Autodesk/webdeploy/production/66fca321b6498e6b4fc9adcaae26d2ac05947169/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python"
+>>>>>>> 07d1c0d330a5abb1ee40cb2c359cebc9243f6b12
 }
