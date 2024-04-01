@@ -3,6 +3,7 @@ import adsk.fusion
 import os
 import json
 
+
 app = adsk.core.Application.get()
 ui = app.userInterface
 skipValidate = False
@@ -12,12 +13,17 @@ class OptiCutLogic():
         #Read cached values if they exist
         settings = None
         settingAttribute = des.attributes.itemByName('OptiCut', 'settings')
+        
         if settingAttribute is not None:
             jsonSettings = settingAttribute.value
+            #get the data passed through settings, formatted as json
             settings = json.loads(jsonSettings)
+            
+    
         #if default units change then it could mess up design 
         #get what units fusion is already using
-        defaultUnits = des.unitsManager.defaultLengthUnits
+        defaultUnits = des.unitsManager.defaultLengthUnits   
+        
 
         #choose in or mm
         if defaultUnits == "in" or defaultUnits == "ft":
@@ -37,30 +43,33 @@ class OptiCutLogic():
         
         if self.standard == "Imperial":
             self.units = "in"
-            self.kerf = "1/8\""
-            self.thickness = "1/2\""
+            #self.kerf = ".125\""
+            #self.thickness = "1/2\""
         else:
             self.units = "mm"
-            self.kerf = "3.175 mm"
-            self.thickness = "12.7 mm"
+            #self.kerf = "3.175 mm"
+            #self.thickness = "2.7 mm"
         #initialize kerf
-        self.kerf = .125
+        self.kerf = '.125 in'
         #if setting is not none
         if settings:
             #update kerf with value stored in cached settings 
-            self.kerf = settings['1/8']
+           self.kerf = settings["Kerf"]
 
-        self.kerfCustom = .125
+        self.kerfCustom = '.5 in'
         if settings:
-            self.kerfCustom = settings["1/8"]
+            self.kerfCustom = settings["KerfCustom"]
 
-        self.thickness = .5
+        self.thickness = ".5 in "
         if settings:
-            self.thickness = settings["1/2"]
+            self.thickness = settings["Thickness"]
 
-        self.thicknessCustom = .5
+        self.thicknessCustom = '.5 in'
         if settings:
-            self.thicknessCustom = settings["1/2"]
+            self.thicknessCustom = settings["ThicknessCustom"]
+
+
+
 
 
     def CreateCommandInputs(self, inputs: adsk.core.CommandInputs):
@@ -68,6 +77,9 @@ class OptiCutLogic():
         skipValidate = True
 
         #create the command inputs
+        selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Bodies', 'Please select bodies to map')
+        selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.Bodies)
+        selectInput.setSelectionLimits(maximum=100, minimum=0)
         self.standardDropDownInput = inputs.addDropDownCommandInput('standard', "Standard", adsk.core.DropDownStyles.TextListDropDownStyle)
         if self.standard == "Imperial":
             self.standardDropDownInput.listItems.add("Imperial", True)
@@ -100,8 +112,8 @@ class OptiCutLogic():
         self.kerfCustomValueInput = inputs.addValueInput("kerfCustom", "Custom Kerf", "in", adsk.core.ValueInput.createByReal(self.kerfCustom))
         if self.kerf != "Custom":
             self.kerfCustomValueInput.isVisible = False
-        elif self.kerf == "Custom":
-            self.kerfCustomValueInput.isVisible = True
+        #elif self.kerf == "Custom":
+            #self.kerfCustomValueInput.isVisible = True
        
         self.thicknessListInput = inputs.addDropDownCommandInput('thickness', "Board Thickness", adsk.core.DropDownStyles.TextListDropDownStyle)
         if self.thickness == "1/4":
@@ -134,7 +146,7 @@ class OptiCutLogic():
         self.errorMessageTextInput.isFullWidth = True
 
         skipValidate = False
-
+        
 
     def HandleInputsChanged(self, args: adsk.core.InputChangedEventArgs):
         changedInput = args.input
@@ -150,17 +162,20 @@ class OptiCutLogic():
                 # otherwise if the user has edited the value, the value won't update 
                 # in the dialog because apparently it remembers the units when the 
                 # value was edited.  Setting the value using the API resets this.
-                self.kerfCustomValueInput.value = self.kerfCustomValueInput.value
-                self.kerfCustomValueInput.unitType = self.units
-                self.thicknessCustomValueInput.value = self.thicknessCustomValueInput.value
-                self.thicknessCustomValueInput.unitType = self.units
                 
+                # self.kerfCustomValueInput.value = self.kerfCustomValueInput.value
+                # self.kerfCustomValueInput.unitType = self.units
+                # self.thicknessCustomValueInput.value = self.thicknessCustomValueInput.value
+                # self.thicknessCustomValueInput.unitType = self.units
+            #handles the change from kerf to kerf custom selection    
             if changedInput.id == 'kerf':
                 if self.kerfListInput.selectedItem.name == 'Custom':
                     self.kerfCustomValueInput.isVisible = True
+                    #should we make the kerf input no visible if they choose custom?
+                    #self.kerfListInput.isVisible = False
                 else:
                     self.kerfCustomValueInput.isVisible = False
-
+            #handles the change from thickness to thickness custom selection
             if changedInput.id == 'thickness':
                 if self.thicknessListInput.selectedItem.name == 'Custom':
                     self.thicknessCustomValueInput.isVisible = True
@@ -192,12 +207,13 @@ class OptiCutLogic():
                     args.areInputsValid = False
                     return 
             else:
-                if self.thicknessListInput.selectedItem.name == '1/4\"':
+                if self.thicknessListInput.selectedItem.name == '1/4':
                     thickness = 1/4
                 elif self.thicknessListInput.selectedItem.name == '3/8\"':
                     thickness = 3/8
                 elif self.thicknessListInput.selectedItem.name == '1/2\"':
                     thickness = 1/2
+        
 
     def HandleExecute(self, args: adsk.core.CommandEventArgs):
         #save current values as attributes

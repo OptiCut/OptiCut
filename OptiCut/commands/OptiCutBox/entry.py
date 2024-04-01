@@ -106,12 +106,9 @@ def stop():
 def command_created(args: adsk.core.CommandCreatedEventArgs):
     # General logging for debug.
     futil.log(f'{CMD_NAME} Command Created Event')
-
-
     # TODO Define the dialog for your command by adding different inputs to the command.
     # https://help.autodesk.com/view/fusion360/ENU/?contextId=CommandInputs
     inputs = args.command.commandInputs
-
     futil.log(f'{CMD_NAME} Command Created Event')
 
     # Setup the event handlers needed for this command.
@@ -142,6 +139,7 @@ def command_execute(args: adsk.core.CommandEventArgs):
     futil.log(f'{CMD_NAME} Command Execute Event')
 
     opti_cut_logic.HandleExecute(args)
+
 
 
 # This event handler is called when the command needs to compute a new preview in the graphics window.
