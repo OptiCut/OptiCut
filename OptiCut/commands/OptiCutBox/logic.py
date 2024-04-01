@@ -1,5 +1,6 @@
 import adsk.core
 import adsk.fusion
+from ...lib import fusion360utils as futil
 import os
 import json
 
@@ -77,9 +78,9 @@ class OptiCutLogic():
         skipValidate = True
 
         #create the command inputs
-        selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Bodies', 'Please select bodies to map')
-        selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.Bodies)
-        selectInput.setSelectionLimits(maximum=100, minimum=0)
+        self.selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Faces', 'Please select faces to map')
+        self.selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.PlanarFaces)
+        self.selectInput.setSelectionLimits(maximum=100, minimum=0)
         self.standardDropDownInput = inputs.addDropDownCommandInput('standard', "Standard", adsk.core.DropDownStyles.TextListDropDownStyle)
         if self.standard == "Imperial":
             self.standardDropDownInput.listItems.add("Imperial", True)
@@ -222,7 +223,14 @@ class OptiCutLogic():
                     'KerfCustom': self.kerfCustomValueInput.value,
                     'Thickness': self.thicknessListInput.selectedItem.name,
                     'ThicknessCustom': self.thicknessCustomValueInput.value}
-        
+
+        for i in range(self.selectInput.selectionCount):
+            bound = self.selectInput.selection(i).entity.geometry.evaluator.parametricRange()
+            futil.log(f"{bound}")
+
+            # these values are not saved, only printed.
+            futil.log(f"max point = {bound.maxPoint.x},{bound.maxPoint.y}")
+            futil.log(f"min point = {bound.minPoint.x},{bound.minPoint.y}")
         jsonSettings = json.dumps(settings)
 
         des = adsk.fusion.Design.cast(app.activeProduct)
