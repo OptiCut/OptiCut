@@ -60,13 +60,10 @@ class OptiCutLogic():
         if settings:
             self.kerfCustom = settings["KerfCustom"]
 
-        self.thickness = ".5 in "
+        self.stockLength = '12 in'
         if settings:
-            self.thickness = settings["Thickness"]
+            self.stockLength 
 
-        self.thicknessCustom = '.5 in'
-        if settings:
-            self.thicknessCustom = settings["ThicknessCustom"]
 
 
 
@@ -115,32 +112,6 @@ class OptiCutLogic():
         #elif self.kerf == "Custom":
             #self.kerfCustomValueInput.isVisible = True
        
-        self.thicknessListInput = inputs.addDropDownCommandInput('thickness', "Board Thickness", adsk.core.DropDownStyles.TextListDropDownStyle)
-        if self.thickness == "1/4":
-            self.thicknessListInput.listItems.add("1/4", True)
-        else:
-            self.thicknessListInput.listItems.add("1/4", False)
-
-        if self.thickness == "3/8":
-            self.thicknessListInput.listItems.add("3/8", True)
-        else:
-            self.thicknessListInput.listItems.add("3/8", False)
-
-        if self.thickness == "1/2":
-            self.thicknessListInput.listItems.add("1/2", True)
-        else:
-            self.thicknessListInput.listItems.add("1/2", False)  
-
-        if self.thickness == "Custom":
-            self.thicknessListInput.listItems.add("Custom", True)
-        else:
-            self.thicknessListInput.listItems.add("Custom", False)
-
-        self.thicknessCustomValueInput = inputs.addValueInput("thicknessCustom", "Custom Thickness", "in", adsk.core.ValueInput.createByReal(self.thicknessCustom))
-        if self.thickness != "Custom":
-            self.thicknessCustomValueInput.isVisible = False
-        elif self.thickness == "Custom":
-            self.thicknessCustomValueInput.isVisible = True
 
         self.errorMessageTextInput = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
         self.errorMessageTextInput.isFullWidth = True
@@ -175,12 +146,7 @@ class OptiCutLogic():
                     #self.kerfListInput.isVisible = False
                 else:
                     self.kerfCustomValueInput.isVisible = False
-            #handles the change from thickness to thickness custom selection
-            if changedInput.id == 'thickness':
-                if self.thicknessListInput.selectedItem.name == 'Custom':
-                    self.thicknessCustomValueInput.isVisible = True
-                else:
-                    self.thicknessCustomValueInput.isVisible = False
+            
 
     def HandleValidateInputs(self, args: adsk.core.ValidateInputsEventArgs):
         if not skipValidate:
@@ -200,28 +166,14 @@ class OptiCutLogic():
                 elif self.kerfListInput.selectedItem.name == '3/32\"':
                     kerf = 3/32
             
-            if self.thicknessListInput.selectedItem.name == 'Custom':
-                thickness = self.thicknessCustomValueInput.value
-                if thickness > 5:
-                    self.errorMessageTextInput.text = "The board thickness entered is larger than board standards"
-                    args.areInputsValid = False
-                    return 
-            else:
-                if self.thicknessListInput.selectedItem.name == '1/4':
-                    thickness = 1/4
-                elif self.thicknessListInput.selectedItem.name == '3/8\"':
-                    thickness = 3/8
-                elif self.thicknessListInput.selectedItem.name == '1/2\"':
-                    thickness = 1/2
+
         
 
     def HandleExecute(self, args: adsk.core.CommandEventArgs):
         #save current values as attributes
         settings = {'Standard': self.standardDropDownInput.selectedItem.name,
                     'Kerf': self.kerfListInput.selectedItem.name,
-                    'KerfCustom': self.kerfCustomValueInput.value,
-                    'Thickness': self.thicknessListInput.selectedItem.name,
-                    'ThicknessCustom': self.thicknessCustomValueInput.value}
+                    'KerfCustom': self.kerfCustomValueInput.value}
         
         jsonSettings = json.dumps(settings)
 
@@ -239,16 +191,6 @@ class OptiCutLogic():
                 kerf = "1/16"
             elif self.kerfListInput.selectedItem.name == '3/32':
                 kerf = "3/32"
-        
-        if self.thicknessListInput.selectedItem.name == 'Custom':
-            thickness = self.thicknessCustomValueInput.value
-        else:
-            if self.thicknessListInput.selectedItem.name == '1/4':
-                thickness = "1/4"
-            elif self.thicknessListInput.selectedItem.name == '3/8':
-                thickness = "3/8"
-            elif self.thicknessListInput.selectedItem.name == '1/2':
-                thickness = "1/2"
 
         
         
