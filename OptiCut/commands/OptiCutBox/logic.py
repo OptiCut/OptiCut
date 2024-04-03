@@ -2,6 +2,7 @@ import adsk.core
 import adsk.fusion
 import os
 import json
+from ...lib import fusion360utils as futil
 
 app = adsk.core.Application.get()
 ui = app.userInterface
@@ -15,13 +16,13 @@ class OptiCutLogic():
         if settingAttribute is not None:
             jsonSettings = settingAttribute.value
             settings = json.loads(jsonSettings)
-        #if default units change then it could mess up design 
+        #if default units change then it could mess up design
         #get what units fusion is already using
         defaultUnits = des.unitsManager.defaultLengthUnits
 
         #choose in or mm
         if defaultUnits == "in" or defaultUnits == "ft":
-            #set the unit for inside the add-in 
+            #set the unit for inside the add-in
             self.units = "in"
         else:
             self.units = "mm"
@@ -61,6 +62,10 @@ class OptiCutLogic():
         skipValidate = True
 
         #create the command inputs
+        self.selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Faces', 'Please select faces to map')
+        self.selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.PlanarFaces)
+        self.selectInput.setSelectionLimits(maximum=100, minimum=0)
+
         self.standardDropDownInput = inputs.addDropDownCommandInput('standard', "Standard", adsk.core.DropDownStyles.TextListDropDownStyle)
         if self.standard == "Imperial":
             self.standardDropDownInput.listItems.add("Imperial", True)
@@ -95,7 +100,7 @@ class OptiCutLogic():
             self.kerfCustomValueInput.isVisible = False
         elif self.kerf == "Custom":
             self.kerfCustomValueInput.isVisible = True
-       
+
 
         self.errorMessageTextInput = inputs.addTextBoxCommandInput('errMessage', '', '', 2, True)
         self.errorMessageTextInput.isFullWidth = True
@@ -119,8 +124,8 @@ class OptiCutLogic():
                 # value was edited.  Setting the value using the API resets this.
                 self.kerfCustomValueInput.value = self.kerfCustomValueInput.value
                 self.kerfCustomValueInput.unitType = self.units
-        
-                
+
+
             if changedInput.id == 'kerf':
                 if self.kerfListInput.selectedItem.name == 'Custom':
                     self.kerfCustomValueInput.isVisible = True
@@ -146,6 +151,19 @@ class OptiCutLogic():
                 elif self.kerfListInput.selectedItem.name == '3/32\"':
                     kerf = 3/32
             
+            if self.thicknessListInput.selectedItem.name == 'Custom':
+                thickness = self.thicknessCustomValueInput.value
+                if thickness > 5:
+                    self.errorMessageTextInput.text = "The board thickness entered is larger than board standards"
+                    args.areInputsValid = False
+                    return 
+            else:
+                if self.thicknessListInput.selectedItem.name == '1/4':
+                    thickness = 1/8
+                elif self.thicknessListInput.selectedItem.name == '3/8':
+                    thickness = 1/16
+                elif self.thicknessListInput.selectedItem.name == '1/2':
+                    thickness = 3/32
 
     def HandleExecute(self, args: adsk.core.CommandEventArgs):
         #save current values as attributes
@@ -154,6 +172,15 @@ class OptiCutLogic():
                     'KerfCustom': self.kerfCustomValueInput.value}
         
         jsonSettings = json.dumps(settings)
+
+        for i in range(self.selectInput.selectionCount):
+            bound = self.selectInput.selection(i).entity.geometry.evaluator.parametricRange()
+            futil.log(f"{bound}")
+
+            # these values are not saved, only printed.
+            futil.log(f"max point = {bound.maxPoint.x},{bound.maxPoint.y}")
+            futil.log(f"min point = {bound.minPoint.x},{bound.minPoint.y}")
+
 
         des = adsk.fusion.Design.cast(app.activeProduct)
         attribs = des.attributes
@@ -169,8 +196,8 @@ class OptiCutLogic():
                 kerf = "1/16"
             elif self.kerfListInput.selectedItem.name == '3/32':
                 kerf = "3/32"
-        
-        
+
+
         app.log("Logged")
 
         
@@ -180,3 +207,4 @@ class OptiCutLogic():
 
 
         
+
