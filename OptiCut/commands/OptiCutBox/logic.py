@@ -15,6 +15,7 @@ class OptiCutLogic():
         settingAttribute = des.attributes.itemByName('OptiCut', 'settings')
         if settingAttribute is not None:
             jsonSettings = settingAttribute.value
+
             settings = json.loads(jsonSettings)              
 
         defaultUnits = des.unitsManager.defaultLengthUnits
@@ -22,6 +23,7 @@ class OptiCutLogic():
         # Determine whether to use inches or millimeters as the intial default.
         if defaultUnits == 'in' or defaultUnits == 'ft':
             self.units = 'in'
+
         else:
             self.units = 'mm'
         
@@ -67,6 +69,7 @@ class OptiCutLogic():
         if settings:
             self.lengthIn = settings['LengthIn']
 
+
         self.widthIn = '0.0 in'
         if settings:
             self.widthIn = settings['WidthIn']
@@ -77,12 +80,12 @@ class OptiCutLogic():
         global skipValidate
         skipValidate = True
 
+
         # Create the command inputs to define the contents of the command dialog.
 
         self.selectInput = inputs.addSelectionInput('SelectionEventsSample', 'Faces', 'Please select faces to map')
         self.selectInput.addSelectionFilter(adsk.core.SelectionCommandInput.PlanarFaces)
         self.selectInput.setSelectionLimits(maximum=100, minimum=0)
-
 
         self.standardDropDownInput = inputs.addDropDownCommandInput('standard', 'Standard', adsk.core.DropDownStyles.TextListDropDownStyle)
         if self.standard == "Imperial":
@@ -270,6 +273,7 @@ class OptiCutLogic():
                     kerf = 1.588
             
 
+
     def HandleExecute(self, args: adsk.core.CommandEventArgs):
         if self.standardDropDownInput.selectedItem.name == 'Imperial':     
             length = self.lengthInValueInput.value * 25.4 
@@ -324,6 +328,7 @@ class OptiCutLogic():
                 kerf = 2.381
             elif self.kerfMmListInput.selectedItem.name == '1.588 mm':
                 kerf = 1.588
+
 
 
 
