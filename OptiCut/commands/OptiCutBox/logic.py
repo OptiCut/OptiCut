@@ -15,7 +15,6 @@ class OptiCutLogic():
         settingAttribute = des.attributes.itemByName('OptiCut', 'settings')
         if settingAttribute is not None:
             jsonSettings = settingAttribute.value
-
             settings = json.loads(jsonSettings)              
 
         defaultUnits = des.unitsManager.defaultLengthUnits
@@ -23,7 +22,6 @@ class OptiCutLogic():
         # Determine whether to use inches or millimeters as the intial default.
         if defaultUnits == 'in' or defaultUnits == 'ft':
             self.units = 'in'
-
         else:
             self.units = 'mm'
         
