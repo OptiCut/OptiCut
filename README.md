@@ -104,17 +104,13 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contributors
+![opticut-team]
 
-Matt Bacheldor
+### Contacts
 
-Jaylon Combs
+Jaylon Combs - [@DandyCorp](https://dandycorp.net)
 
-Cuong Dinh - [@Instagram]([https://www.instagram.com/itsdeandinh])
-
-Clare Lambert
-
-Jack Reed
-
+Cuong Dinh - [@Instagram](https://www.instagram.com/itsdeandinh) - [@GitHub](https://github.com/cdinh92) - [@LinkedIn](https://www.linkedin.com/in/cuongdinh97/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -139,3 +135,4 @@ Here's all helpful resources that OptiCut Team uses for the project:
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [product-screenshot]: images/product-screenshot-website.png
+[opticut-team]: images/opticut-team-frame.png
