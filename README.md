@@ -105,7 +105,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contributors
 
+Matt Bacheldor
+Jaylon Combs
 Cuong Dinh - [@Instagram]([https://www.instagram.com/itsdeandinh])
+Clare Lambert
+Jack Reed
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
