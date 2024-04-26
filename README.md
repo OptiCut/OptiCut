@@ -1,10 +1,10 @@
 # OptiCut
-##The Woodworker's Fusion360 Companion
+## The Woodworker's Fusion360 Companion
 
 ### Description
 OptiCut is a Fusion360 add-in designed with woodworkers in mind. It utilizes design data from Fusion360 to optimize the layout of woodworking projects on stock materials, enhancing efficiency and reducing waste.
 
-###Features
+### Features
 * __Seamlessly Intgrates with Fusion 360:__ Directly choose the faces you want laid out from you Fusion design
 * __Automated Material Layout:__  A machine learning algorithm determines the "best" layout for your design
 * __Efficiently Determine Material Needed:__ The algoritm will calculate the amount of material needed to complete your project
