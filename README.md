@@ -106,9 +106,13 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contributors
 
 Matt Bacheldor
+
 Jaylon Combs
+
 Cuong Dinh - [@Instagram]([https://www.instagram.com/itsdeandinh])
+
 Clare Lambert
+
 Jack Reed
 
 
