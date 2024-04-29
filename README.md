@@ -16,6 +16,8 @@
     <br />
     <br />
     ·
+    <a href="https://github.com/OptiCut/opticut.github.io">Visit Website Repo</a>
+    .
     <a href="https://github.com/OptiCut/OptiCut/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
     ·
     <a href="https://github.com/OptiCut/OptiCut/issues/new?assignees=&labels=&projects=&template=user-stories.md&title=%5BUserStory%5D+brief+identification+of+the+user+story">Add User Stories</a>
